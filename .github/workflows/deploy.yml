@@ -1,0 +1,20 @@
+# Example GitHub Actions workflow for uploading QR code images
+name: Upload QR Codes to GitHub
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  upload_qr_code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Upload QR code
+        run: |
+          # Your code to generate and upload QR codes here
+          # Ensure the images are pushed to the correct branch (e.g., main)

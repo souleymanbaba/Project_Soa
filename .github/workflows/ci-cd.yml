@@ -1,0 +1,60 @@
+name: QR Backend CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Étape 1 : Récupérer le code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Étape 2 : Configurer Python
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+
+    # Étape 3 : Installer les dépendances
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # Étape 4 : Lancer les tests unitaires
+    - name: Run unit tests
+      run: |
+        pytest test_main.py
+
+    # Étape 5 : Construire l'application
+    - name: Run the application
+      run: |
+        python main.py & sleep 10  # Lancer temporairement pour valider
+
+    # Étape 6 : Vérifier les QR Codes générés
+    - name: Check generated QR codes
+      run: |
+        ls -l qr_codes/
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test-and-build
+
+    steps:
+    # Étape 1 : Déployer les fichiers dans un repository GitHub
+    - name: Deploy QR codes to GitHub
+      run: |
+        echo "Deploying QR codes..."
+      env:
+        GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+        REPO_OWNER: ${{ secrets.REPO_OWNER }}
+        REPO_NAME: Project_Soa
+        BRANCH_NAME: main
