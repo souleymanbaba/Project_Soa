@@ -16,3 +16,4 @@ httpx==0.24.1
 requests
 qrcode
 python-dotenv
+Pillow
