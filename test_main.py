@@ -4,7 +4,7 @@ from main import app
 client = TestClient(app)
 
 def test_generate_qr():
-    url = "http://example.com"
+    url = "https://www.kooora.com/"
     response = client.post("/generate-qr/", json={"url": url})
 
     assert response.status_code == 200
